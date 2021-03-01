@@ -48,6 +48,8 @@ function getRequest() {
   // API. Professor Tak walked me through the code below. 
   // Lots of thinking it through and problem solving was needed to tweak the 
   // code to adjust to TinEye's required format when making a GET request. 
+
+  // Definitions for API_KEY and API_PRIVATE_KEY must be manually defined
   // Date started: 03/22/2019
   // Date(s) updated: 03/28/2019, 04/02/2019
   
@@ -86,8 +88,6 @@ function getRequest() {
     // send to tineye
     if (checkWithTineye) {
       let stringOne = "";
-      let api_key = "gBPAh_4CNK_rxYgtUAp,";
-      let api_private_key = "2vSPMNCpM7tAKoy,qNXPLLIhF3tGidLioso5=TQ."
       let http_verb = "GET"
       let content_type_header = ""
       let uploaded_image_name = ""
@@ -97,17 +97,17 @@ function getRequest() {
       let nonce = makeString(8)
       let request_url = "https://api.tineye.com/rest/search/"
       let image_url = "https://drive.google.com/uc?id="
-      let string_to_sign = api_private_key + http_verb + content_type_header + uploaded_image_name +
+      let string_to_sign = API_PRIVATE_KEY + http_verb + content_type_header + uploaded_image_name +
                            date + nonce + request_url + "image_url="+encodeURIComponent(image_url+file_id)
       // TODO: See if this can chain?
-      let api_sig: string = Utilities.computeHmacSha256Signature(string_to_sign, api_private_key).map(function(chr){return (chr+256).toString(16).slice(-2)})
+      let api_sig: string = Utilities.computeHmacSha256Signature(string_to_sign, API_PRIVATE_KEY).map(function(chr){return (chr+256).toString(16).slice(-2)})
       .join('')
       let options: URLFetchReqOptions = {
         method: "get",
         muteHttpExceptions: true,
         escaping: false,
       };
-      let url = request_url+"?api_key="+(api_key)+"&image_url="+encodeURIComponent(image_url+file_id)+"&date="+date+"&nonce="+nonce+"&api_sig="+(api_sig);
+      let url = request_url+"?api_key="+(API_KEY)+"&image_url="+encodeURIComponent(image_url+file_id)+"&date="+date+"&nonce="+nonce+"&api_sig="+(api_sig);
       
       // send request, receive response
       let results: HTTPResponse = UrlFetchApp.fetch(url, options);

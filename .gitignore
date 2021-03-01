@@ -4,6 +4,9 @@
 # normally should not be ignored, but this is not npm distribution
 package-lock.json
 
+# ignore keys
+keys.ts
+
 # -------------- Default ---------------
 # Logs
 logs
